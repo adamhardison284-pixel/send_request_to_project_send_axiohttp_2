@@ -2,8 +2,8 @@ name: Async Workers Runner
 
 on:
   workflow_dispatch:   # manual trigger
-  schedule:
-    - cron: "*/10 * * * *"   # runs every 10 minutes
+  #schedule:
+  #  - cron: "*/10 * * * *"   # runs every 10 minutes
 
 jobs:
   run:

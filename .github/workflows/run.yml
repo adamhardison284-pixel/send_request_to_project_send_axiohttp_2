@@ -1,15 +1,17 @@
 name: Async Workers Runner
 
 on:
-  workflow_dispatch:   # manual trigger
-  #schedule:
-  #  - cron: "*/10 * * * *"   # runs every 10 minutes
+  workflow_dispatch
+
+concurrency:
+  group: async-workers
+  cancel-in-progress: true
 
 jobs:
   run:
     runs-on: ubuntu-latest
 
-    timeout-minutes: 15   # safety limit
+    timeout-minutes: 65   # slightly above 60 min (safety buffer)
 
     steps:
       - name: 📥 Checkout repository
@@ -25,7 +27,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install aiohttp
 
-      - name: 🚀 Run script
+      - name: 🚀 Run script (60 minutes)
         run: |
-          echo "Starting workers..."
-          timeout 600 python -u script.py
+          echo "Starting workers for 60 minutes..."
+          timeout 3600s python -u script.py
+
+      - name: ✅ Finished
+        run: echo "Job completed"
